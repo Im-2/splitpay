@@ -1,0 +1,66 @@
+import { useEffect, useState } from 'react'
+import type { Split } from '../lib/split'
+import { getNimiqProvider, isErrorResponse } from '../lib/nimiqProvider'
+import { getStoredParticipantId, setStoredParticipantId } from '../lib/participantStore'
+import { ParticipantPicker } from './ParticipantPicker'
+import { PayShare } from './PayShare'
+import { OrganizerStatus } from './OrganizerStatus'
+
+export function SplitView({ split }: { split: Split }) {
+  const [viewerAddress, setViewerAddress] = useState<string | null>(null)
+  const [addressResolved, setAddressResolved] = useState(false)
+  const [participantId, setParticipantId] = useState<string | null>(() =>
+    getStoredParticipantId(split.id),
+  )
+
+  useEffect(() => {
+    let cancelled = false
+    getNimiqProvider()
+      .then((provider) => provider.listAccounts())
+      .then((accounts) => {
+        if (cancelled) return
+        if (!isErrorResponse(accounts) && accounts[0]) {
+          setViewerAddress(accounts[0])
+        }
+      })
+      .catch(() => {
+        // Declined or unavailable — continue as an anonymous participant.
+      })
+      .finally(() => {
+        if (!cancelled) setAddressResolved(true)
+      })
+    return () => {
+      cancelled = true
+    }
+  }, [])
+
+  if (!addressResolved) {
+    return (
+      <div className="card">
+        <p className="muted">Connecting to Nimiq Pay...</p>
+      </div>
+    )
+  }
+
+  if (viewerAddress && viewerAddress === split.organizerAddress) {
+    return <OrganizerStatus split={split} />
+  }
+
+  const storedParticipant = participantId
+    ? split.participants.find((p) => p.id === participantId)
+    : undefined
+
+  if (!storedParticipant) {
+    return (
+      <ParticipantPicker
+        split={split}
+        onPick={(id) => {
+          setStoredParticipantId(split.id, id)
+          setParticipantId(id)
+        }}
+      />
+    )
+  }
+
+  return <PayShare split={split} participantId={storedParticipant.id} viewerAddress={viewerAddress} />
+}
