@@ -18,6 +18,30 @@
   color: var(--nimiq-orange);
 }
 
+.tabs {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 8px;
+  background: var(--input-bg);
+  border-radius: 10px;
+  padding: 4px;
+}
+
+.tabs .tab {
+  flex: 1;
+  background: none;
+  padding: 8px 10px;
+  font-size: 0.9rem;
+  border-radius: 8px;
+  color: var(--muted-text);
+}
+
+.tabs .tab.active {
+  background: var(--card-bg);
+  color: var(--text);
+  font-weight: 600;
+}
+
 main {
   width: 100%;
   max-width: 420px;
@@ -226,4 +250,31 @@ button.icon-button {
 .badge.unpaid {
   background: var(--muted-button-bg);
   color: var(--muted-text);
+}
+
+.card h2 {
+  font-size: 1rem;
+  margin: 4px 0 8px;
+}
+
+.history-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.history-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  text-align: left;
+  background: var(--input-bg);
+  border: 1px solid var(--border-color);
+}
+
+.history-row-main {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
 }

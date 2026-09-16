@@ -2,6 +2,8 @@ import { useState } from 'react'
 import { getNimiqProvider, isErrorResponse, describeWalletError } from '../lib/nimiqProvider'
 import { createSplit, splitUrl, type Split } from '../lib/split'
 import { formatNim } from '../lib/format'
+import { getDeviceId } from '../lib/deviceId'
+import { recordCreatedSplit } from '../lib/history'
 import { ErrorBanner } from './ErrorBanner'
 
 export function CreateSplit() {
@@ -50,6 +52,7 @@ export function CreateSplit() {
         participantNames: validNames,
       })
       setCreated(split)
+      getDeviceId().then((deviceId) => recordCreatedSplit(split, deviceId))
     } catch {
       setError('Could not reach Nimiq Pay. Make sure this app is running inside Nimiq Pay and try again.')
     } finally {

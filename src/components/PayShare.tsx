@@ -5,6 +5,8 @@ import { formatNim } from '../lib/format'
 import { getNimiqProvider, isErrorResponse, describeWalletError } from '../lib/nimiqProvider'
 import { fetchBalanceLuna } from '../lib/balance'
 import { fetchPaymentStatuses } from '../lib/reconcile'
+import { getDeviceId } from '../lib/deviceId'
+import { recordPaidSplit } from '../lib/history'
 import { ErrorBanner } from './ErrorBanner'
 
 type PayState = 'checking' | 'idle' | 'pending' | 'success' | 'error'
@@ -86,6 +88,15 @@ export function PayShare({
       }
       setTxHash(result)
       setState('success')
+      getDeviceId().then((deviceId) =>
+        recordPaidSplit({
+          split,
+          participantId,
+          txHash: result,
+          amountLuna: owedLuna,
+          deviceId,
+        }),
+      )
     } catch {
       setErrorMessage('Could not reach Nimiq Pay to send the payment. Check your connection and try again.')
       setState('error')

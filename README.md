@@ -25,6 +25,9 @@ Nimiq wallet interaction is not decorative — it is the entire mechanism the ap
 - **Balance check** — the Pay screen reads the participant's on-chain balance (via
   `getAccountByAddress` over the same public RPC) and warns them upfront if it won't cover their share,
   without ever blocking the actual payment attempt if that read fails or is slow.
+- **`requestDeviceIdentifier()`** — tags local history entries with a stable per-device ID instead of
+  inventing an account system. Requested once, early, on app load (not repeatedly) with a visible reason
+  shown to the user in Nimiq Pay's own consent prompt.
 
 ## Why no backend
 
@@ -43,6 +46,11 @@ The tradeoff: a split's fields are visible to anyone with the link (already true
 bill), and links get long. Both are acceptable for a same-group expense-splitting tool built in three
 days.
 
+History works the same way: each device keeps its own local record (in `localStorage`) of the splits it
+created and the splits it paid into, tagged with Nimiq Pay's `requestDeviceIdentifier()` rather than an
+account system. It's a convenience list for "what did I do", not a synced ledger — the actual source of
+truth for "who's paid" is always the live chain query, never the local history.
+
 ## Stack
 
 - Vite + React + TypeScript
@@ -60,12 +68,15 @@ src/
     balance.ts            # reads a participant's on-chain balance
     format.ts              # NIM/Luna conversions & display
     participantStore.ts     # remembers "which participant am I" per split, per device
+    deviceId.ts               # wraps requestDeviceIdentifier(), one-shot & non-blocking
+    history.ts                  # local (per-device) record of created/paid splits
   components/
     CreateSplit.tsx     # organizer: build a split, get the share link
     SplitView.tsx        # routes a `?s=` link to the organizer or participant view
     ParticipantPicker.tsx # "which one are you?" (first visit to a link)
     PayShare.tsx           # participant: see share + balance, pay, see result
     OrganizerStatus.tsx     # organizer: live paid/unpaid list, polls + manual refresh
+    HistoryView.tsx           # this device's created & paid-into splits, newest first
 ```
 
 ## Setup
