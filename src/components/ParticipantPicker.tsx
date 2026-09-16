@@ -1,6 +1,7 @@
 import type { Split } from '../lib/split'
 import { formatNim } from '../lib/format'
 import { shareLuna } from '../lib/split'
+import { Avatar } from './Avatar'
 
 export function ParticipantPicker({
   split,
@@ -20,6 +21,7 @@ export function ParticipantPicker({
       <div className="button-stack">
         {split.participants.map((p) => (
           <button key={p.id} className="pick-button" onClick={() => onPick(p.id)}>
+            <Avatar name={p.name} />
             {p.name}
           </button>
         ))}

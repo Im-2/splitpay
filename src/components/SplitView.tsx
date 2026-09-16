@@ -4,14 +4,23 @@ import { getNimiqProvider, isErrorResponse } from '../lib/nimiqProvider'
 import { getStoredParticipantId, setStoredParticipantId } from '../lib/participantStore'
 import { ParticipantPicker } from './ParticipantPicker'
 import { PayShare } from './PayShare'
-import { OrganizerStatus } from './OrganizerStatus'
+import { SplitStatus } from './SplitStatus'
 
 export function SplitView({ split }: { split: Split }) {
   const [viewerAddress, setViewerAddress] = useState<string | null>(null)
   const [addressResolved, setAddressResolved] = useState(false)
-  const [participantId, setParticipantId] = useState<string | null>(() =>
-    getStoredParticipantId(split.id),
-  )
+
+  const params = new URLSearchParams(window.location.search)
+  const wantsStatusView = params.get('view') === 'status'
+  const linkedParticipantId = params.get('p')
+
+  const [participantId, setParticipantId] = useState<string | null>(() => {
+    if (linkedParticipantId && split.participants.some((p) => p.id === linkedParticipantId)) {
+      setStoredParticipantId(split.id, linkedParticipantId)
+      return linkedParticipantId
+    }
+    return getStoredParticipantId(split.id)
+  })
 
   useEffect(() => {
     let cancelled = false
@@ -42,8 +51,14 @@ export function SplitView({ split }: { split: Split }) {
     )
   }
 
-  if (viewerAddress && viewerAddress === split.organizerAddress) {
-    return <OrganizerStatus split={split} />
+  const isOrganizer = viewerAddress !== null && viewerAddress === split.organizerAddress
+
+  if (isOrganizer) {
+    return <SplitStatus split={split} isOrganizer />
+  }
+
+  if (wantsStatusView) {
+    return <SplitStatus split={split} isOrganizer={false} />
   }
 
   const storedParticipant = participantId

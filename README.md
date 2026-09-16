@@ -75,8 +75,9 @@ src/
     SplitView.tsx        # routes a `?s=` link to the organizer or participant view
     ParticipantPicker.tsx # "which one are you?" (first visit to a link)
     PayShare.tsx           # participant: see share + balance, pay, see result
-    OrganizerStatus.tsx     # organizer: live paid/unpaid list, polls + manual refresh
+    SplitStatus.tsx          # live paid/unpaid list (organizer, or a participant after paying) + nudge
     HistoryView.tsx           # this device's created & paid-into splits, newest first
+    Avatar.tsx                  # deterministic colored initials avatar
 ```
 
 ## Setup

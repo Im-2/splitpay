@@ -1,0 +1,7 @@
+<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="SplitPay">
+  <polygon points="65,14 135,14 186,100 135,186 65,186 14,100" fill="#F3C332" />
+  <text x="38" y="146" font-family="Georgia, 'Times New Roman', serif" font-size="128" font-weight="700" fill="#151116">S</text>
+  <text x="90" y="146" font-family="Georgia, 'Times New Roman', serif" font-size="128" font-weight="700" fill="#151116">P</text>
+  <line x1="34" y1="132" x2="158" y2="22" stroke="#151116" stroke-width="4" stroke-linecap="round" />
+  <line x1="44" y1="132" x2="168" y2="22" stroke="#F3C332" stroke-width="4" stroke-linecap="round" />
+</svg>

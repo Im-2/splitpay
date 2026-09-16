@@ -1,12 +1,13 @@
 import { useEffect, useState } from 'react'
 import type { Split } from '../lib/split'
-import { shareLuna, memoFor } from '../lib/split'
+import { shareLuna, memoFor, splitUrl } from '../lib/split'
 import { formatNim } from '../lib/format'
 import { getNimiqProvider, isErrorResponse, describeWalletError } from '../lib/nimiqProvider'
 import { fetchBalanceLuna } from '../lib/balance'
 import { fetchPaymentStatuses } from '../lib/reconcile'
 import { getDeviceId } from '../lib/deviceId'
 import { recordPaidSplit } from '../lib/history'
+import { Avatar } from './Avatar'
 import { ErrorBanner } from './ErrorBanner'
 
 type PayState = 'checking' | 'idle' | 'pending' | 'success' | 'error'
@@ -109,9 +110,40 @@ export function PayShare({
 
   const insufficientBalance = balanceLuna !== null && balanceLuna < owedLuna
 
+  if (state === 'success') {
+    return (
+      <div className="card">
+        <div className="success-box">
+          <span className="status-icon success">&#10003;</span>
+          <h1>Payment successful</h1>
+          <p className="muted">You paid</p>
+          <p className="amount">{formatNim(owedLuna)}</p>
+          <p className="muted small">{split.description}</p>
+          {txHash && <p className="muted small">Transaction {txHash.slice(0, 16)}...</p>}
+        </div>
+        <button
+          className="primary"
+          onClick={() => {
+            const url = new URL(splitUrl(split))
+            url.searchParams.set('view', 'status')
+            window.location.href = url.toString()
+          }}
+        >
+          View split status
+        </button>
+      </div>
+    )
+  }
+
   return (
     <div className="card">
-      <h1>{split.description}</h1>
+      <div className="name-row">
+        <Avatar name={participant.name} />
+        <div>
+          <h1>{split.description}</h1>
+          <p className="muted small">Requested by the organizer</p>
+        </div>
+      </div>
       <p className="muted">Hi {participant.name}, here's what you owe</p>
       <p className="amount">{formatNim(owedLuna)}</p>
       {!balanceLoading && balanceLuna !== null && (
@@ -119,18 +151,11 @@ export function PayShare({
           Your balance: {formatNim(balanceLuna)}
         </p>
       )}
-      {insufficientBalance && state !== 'success' && (
+      {insufficientBalance && (
         <ErrorBanner message="Not enough NIM to cover this." />
       )}
 
       {state === 'checking' && <p className="muted small">Checking payment status...</p>}
-
-      {state === 'success' && (
-        <div className="success-box">
-          <p>Paid!</p>
-          {txHash && <p className="muted small">Transaction {txHash.slice(0, 16)}...</p>}
-        </div>
-      )}
 
       {(state === 'idle' || state === 'pending' || state === 'error') && (
         <>
@@ -138,11 +163,11 @@ export function PayShare({
             <ErrorBanner message={errorMessage} onRetry={handlePay} />
           )}
           <button
-            className={insufficientBalance ? 'primary muted-button' : 'primary'}
+            className={insufficientBalance ? 'gold muted-button' : 'gold'}
             disabled={state === 'pending'}
             onClick={handlePay}
           >
-            {state === 'pending' ? 'Confirm in Nimiq Pay...' : 'Pay now'}
+            {state === 'pending' ? 'Confirm in Nimiq Pay...' : 'Pay with Nimiq Pay'}
           </button>
         </>
       )}

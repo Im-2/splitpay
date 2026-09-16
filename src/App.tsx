@@ -29,17 +29,8 @@ function App() {
   return (
     <div className="app-shell">
       <header className="app-header">
+        <img src="/logo.svg" className="logo" alt="" />
         <h2>SplitPay</h2>
-        {!hasSplitParam && (
-          <nav className="tabs">
-            <button className={tab === 'create' ? 'tab active' : 'tab'} onClick={() => setTab('create')}>
-              New split
-            </button>
-            <button className={tab === 'history' ? 'tab active' : 'tab'} onClick={() => setTab('history')}>
-              History
-            </button>
-          </nav>
-        )}
       </header>
       <main>
         {hasSplitParam && !split && (
@@ -51,6 +42,20 @@ function App() {
         {!hasSplitParam && tab === 'create' && <CreateSplit />}
         {!hasSplitParam && tab === 'history' && <HistoryView />}
       </main>
+      {!hasSplitParam && (
+        <nav className="bottom-nav">
+          <div className="bottom-nav-inner">
+            <button className={tab === 'create' ? 'active' : ''} onClick={() => setTab('create')}>
+              <span className="nav-icon">+</span>
+              New split
+            </button>
+            <button className={tab === 'history' ? 'active' : ''} onClick={() => setTab('history')}>
+              <span className="nav-icon">&#9776;</span>
+              History
+            </button>
+          </div>
+        </nav>
+      )}
     </div>
   )
 }

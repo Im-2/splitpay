@@ -4,6 +4,7 @@ import { createSplit, splitUrl, type Split } from '../lib/split'
 import { formatNim } from '../lib/format'
 import { getDeviceId } from '../lib/deviceId'
 import { recordCreatedSplit } from '../lib/history'
+import { Avatar } from './Avatar'
 import { ErrorBanner } from './ErrorBanner'
 
 export function CreateSplit() {
@@ -64,14 +65,17 @@ export function CreateSplit() {
     const link = splitUrl(created)
     return (
       <div className="card">
-        <h1>Split created</h1>
-        <p className="muted">
-          Share this link with the group. Each person opens it, picks their name, and pays their share
-          directly to your wallet.
-        </p>
+        <div className="success-box">
+          <span className="status-icon neutral">&#10003;</span>
+          <h1>Split created!</h1>
+          <p className="muted">{created.description}</p>
+          <p className="amount">{formatNim(created.totalLuna)}</p>
+          <p className="muted small">{created.participants.length} people</p>
+        </div>
         <div className="link-box">
           <code>{link}</code>
         </div>
+        <p className="muted small">Anyone with this link can pay their share.</p>
         <div className="button-row">
           <button
             className="primary"
@@ -79,13 +83,12 @@ export function CreateSplit() {
               navigator.clipboard?.writeText(link).catch(() => {})
             }}
           >
-            Copy link
+            Copy split link
           </button>
-          <button onClick={() => (window.location.href = link)}>Open live status</button>
+          <button className="outline" onClick={() => (window.location.href = link)}>
+            Open live status
+          </button>
         </div>
-        <p className="muted small">
-          Split total: {formatNim(created.totalLuna)} &middot; {created.participants.length} participants
-        </p>
       </div>
     )
   }
@@ -118,6 +121,7 @@ export function CreateSplit() {
         <span>Who owes you?</span>
         {names.map((name, i) => (
           <div className="name-row" key={i}>
+            <Avatar name={name || `Person ${i + 1}`} size={28} />
             <input
               type="text"
               placeholder={`Person ${i + 1}`}
