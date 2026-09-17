@@ -9,10 +9,12 @@ import { Screen3ShareLink } from '../screens/Screen3ShareLink'
 
 export function CreateSplit({
   onBack,
-  onOpenHistory,
+  onNavigateHome,
+  onNavigateHistory,
 }: {
   onBack: () => void
-  onOpenHistory: () => void
+  onNavigateHome: () => void
+  onNavigateHistory: () => void
 }) {
   const [description, setDescription] = useState('')
   const [totalNim, setTotalNim] = useState('')
@@ -90,7 +92,8 @@ export function CreateSplit({
   return (
     <Screen2CreateSplit
       onBack={onBack}
-      onOpenHistory={onOpenHistory}
+      onNavigateHome={onNavigateHome}
+      onNavigateHistory={onNavigateHistory}
       description={description}
       onDescriptionChange={setDescription}
       totalNim={totalNim}

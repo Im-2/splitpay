@@ -7,6 +7,10 @@
   of the photo (which tends to be upper-right in a hand/phone shot).
 */
 
+body {
+  margin: 0;
+}
+
 .lp-shell {
   --lp-text-primary: #ffffff;
   --lp-text-muted: rgba(255, 255, 255, 0.72);
@@ -17,17 +21,15 @@
 
   font-family: var(--lp-font);
   background: #0a0a0a;
-  padding: 24px;
   display: flex;
   justify-content: center;
+  min-height: 100dvh;
 }
 
 .lp-card {
   position: relative;
   width: 100%;
-  max-width: 1280px;
-  min-height: 640px;
-  border-radius: 28px;
+  min-height: 100dvh;
   overflow: hidden;
   background-size: cover;
   background-position: 62% center;
@@ -178,13 +180,7 @@
    ========================================================= */
 
 @media (max-width: 860px) {
-  .lp-shell {
-    padding: 12px;
-  }
-
   .lp-card {
-    min-height: 560px;
-    border-radius: 20px;
     background-position: 70% center;
   }
 

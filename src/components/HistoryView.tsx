@@ -9,6 +9,7 @@ import { splitUrl } from '../lib/split'
 import { formatNim } from '../lib/format'
 import { fetchPaymentStatuses } from '../lib/reconcile'
 import { HeaderBack, IconChevronRight } from './PhoneScreen'
+import { BottomNav } from './atoms'
 
 function formatDate(ms: number): string {
   return new Date(ms).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })
@@ -96,7 +97,15 @@ function PaidRow({ entry, isLast }: { entry: PaidHistoryEntry; isLast: boolean }
   )
 }
 
-export function HistoryView({ onBack }: { onBack: () => void }) {
+export function HistoryView({
+  onBack,
+  onNavigateHome,
+  onNavigateHistory,
+}: {
+  onBack: () => void
+  onNavigateHome: () => void
+  onNavigateHistory: () => void
+}) {
   const [created] = useState(() => getCreatedHistory())
   const [paid] = useState(() => getPaidHistory())
 
@@ -130,6 +139,7 @@ export function HistoryView({ onBack }: { onBack: () => void }) {
           </div>
         )}
       </div>
+      <BottomNav active="history" onHome={onNavigateHome} onHistory={onNavigateHistory} />
     </>
   )
 }

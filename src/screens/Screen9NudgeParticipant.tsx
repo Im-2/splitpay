@@ -1,5 +1,6 @@
 import { IconCopy, IconShare } from '../components/PhoneScreen'
-import { PrimaryButton, SecondaryButton } from '../components/atoms'
+import { BottomNav, PrimaryButton, SecondaryButton } from '../components/atoms'
+import { navigateToTab } from '../lib/navigation'
 
 /**
  * Reached by tapping a pending row's kebab menu on Screen8. This does NOT
@@ -50,6 +51,7 @@ export function Screen9NudgeParticipant({
         <PrimaryButton onClick={onShare}>Share via...</PrimaryButton>
         <SecondaryButton onClick={onDone}>Done</SecondaryButton>
       </div>
+      <BottomNav active={null} onHome={() => navigateToTab('create')} onHistory={() => navigateToTab('history')} />
     </>
   )
 }

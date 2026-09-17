@@ -40,10 +40,10 @@ export function LandingPage({ onEnter }: { onEnter: () => void }) {
           </button>
 
           <div className="lp-pills">
-            <span className="lp-pill">👥 Create Split</span>
-            <span className="lp-pill">🔗 Share Link</span>
-            <span className="lp-pill">⇄ Get Paid</span>
-            <span className="lp-pill">📈 Track Status</span>
+            <span className="lp-pill">Create Split</span>
+            <span className="lp-pill">Share Link</span>
+            <span className="lp-pill">Get Paid</span>
+            <span className="lp-pill">Track Status</span>
           </div>
 
           <div className="lp-footer-note">

@@ -1,5 +1,5 @@
 import React from 'react'
-import { IconCoin, IconHome, IconUser, IconWallet } from './PhoneScreen'
+import { IconHistory, IconHome } from './PhoneScreen'
 
 /** A person in a split. Static shape used throughout the reference screens. */
 export type Participant = {
@@ -60,25 +60,39 @@ export function SecondaryButton({
 }
 
 /**
- * Bottom nav shown on organizer-facing screens (split status, nudge).
- * `active` selects which of the four icons reads as the current tab.
+ * Bottom nav shown across the in-app screens. The reference showed four
+ * icons (home/wallet/coin/user), but only two map to a real feature of this
+ * app (new split, history) — the other two had no destination to click
+ * through to, so they were dropped rather than left as dead buttons.
  */
-export function BottomNav({ active = 'wallet' }: { active?: 'home' | 'wallet' | 'coin' | 'user' }) {
-  const cls = (name: string) => `sp-bottomnav-item${active === name ? ' active' : ''}`
+export function BottomNav({
+  active,
+  onHome,
+  onHistory,
+}: {
+  active: 'home' | 'history' | null
+  onHome: () => void
+  onHistory: () => void
+}) {
+  const itemStyle: React.CSSProperties = { background: 'none', border: 'none', padding: 0, cursor: 'pointer' }
   return (
     <div className="sp-bottomnav">
-      <span className={cls('home')}>
+      <button
+        className={`sp-bottomnav-item${active === 'home' ? ' active' : ''}`}
+        style={itemStyle}
+        onClick={onHome}
+        aria-label="New split"
+      >
         <IconHome />
-      </span>
-      <span className={cls('wallet')}>
-        <IconWallet />
-      </span>
-      <span className={cls('coin')}>
-        <IconCoin />
-      </span>
-      <span className={cls('user')}>
-        <IconUser />
-      </span>
+      </button>
+      <button
+        className={`sp-bottomnav-item${active === 'history' ? ' active' : ''}`}
+        style={itemStyle}
+        onClick={onHistory}
+        aria-label="History"
+      >
+        <IconHistory />
+      </button>
     </div>
   )
 }

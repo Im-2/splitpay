@@ -6,3 +6,12 @@ export function goBack(fallbackUrl: string) {
     window.location.href = fallbackUrl
   }
 }
+
+/**
+ * Bottom-nav taps from a split-flow screen (reached via a shared link) live
+ * outside the home app's React state entirely, so getting to "New split" or
+ * "History" from there is a real navigation, not a state change.
+ */
+export function navigateToTab(tab: 'create' | 'history') {
+  window.location.href = `/?tab=${tab}`
+}

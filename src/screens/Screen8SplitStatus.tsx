@@ -1,7 +1,8 @@
 import { HeaderBack, IconKebab, IconShare } from '../components/PhoneScreen'
-import { Avatar, SecondaryButton, StatusBadge } from '../components/atoms'
+import { Avatar, BottomNav, SecondaryButton, StatusBadge } from '../components/atoms'
 import { ErrorBanner } from '../components/ErrorBanner'
 import { initialFor, colorFor } from '../lib/avatarStyle'
+import { navigateToTab } from '../lib/navigation'
 
 export interface StatusParticipant {
   id: string
@@ -111,6 +112,7 @@ export function Screen8SplitStatus({
           {refreshing ? 'Checking...' : 'Refresh'}
         </SecondaryButton>
       </div>
+      <BottomNav active={null} onHome={() => navigateToTab('create')} onHistory={() => navigateToTab('history')} />
     </>
   )
 }

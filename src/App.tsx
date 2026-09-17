@@ -11,8 +11,9 @@ import { LandingPage } from './marketing/LandingPage'
 type Screen = 'create' | 'history'
 
 function App() {
-  const [entered, setEntered] = useState(false)
-  const [screen, setScreen] = useState<Screen>('create')
+  const initialTab = new URLSearchParams(window.location.search).get('tab')
+  const [entered, setEntered] = useState(() => !!initialTab)
+  const [screen, setScreen] = useState<Screen>(initialTab === 'history' ? 'history' : 'create')
 
   const split = useMemo(() => {
     const encoded = new URLSearchParams(window.location.search).get('s')
@@ -49,9 +50,17 @@ function App() {
       {split ? (
         <SplitView split={split} />
       ) : screen === 'create' ? (
-        <CreateSplit onBack={() => setEntered(false)} onOpenHistory={() => setScreen('history')} />
+        <CreateSplit
+          onBack={() => setEntered(false)}
+          onNavigateHome={() => setScreen('create')}
+          onNavigateHistory={() => setScreen('history')}
+        />
       ) : (
-        <HistoryView onBack={() => setScreen('create')} />
+        <HistoryView
+          onBack={() => setScreen('create')}
+          onNavigateHome={() => setScreen('create')}
+          onNavigateHistory={() => setScreen('history')}
+        />
       )}
     </div>
   )

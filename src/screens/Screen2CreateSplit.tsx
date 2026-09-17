@@ -1,5 +1,5 @@
-import { HeaderBack, IconClose, IconHistory } from '../components/PhoneScreen'
-import { Avatar, PrimaryButton } from '../components/atoms'
+import { HeaderBack, IconClose } from '../components/PhoneScreen'
+import { Avatar, BottomNav, PrimaryButton } from '../components/atoms'
 import { ErrorBanner } from '../components/ErrorBanner'
 import { initialFor, colorFor } from '../lib/avatarStyle'
 
@@ -13,7 +13,8 @@ import { initialFor, colorFor } from '../lib/avatarStyle'
  */
 export function Screen2CreateSplit({
   onBack,
-  onOpenHistory,
+  onNavigateHome,
+  onNavigateHistory,
   description,
   onDescriptionChange,
   totalNim,
@@ -30,7 +31,8 @@ export function Screen2CreateSplit({
   error,
 }: {
   onBack: () => void
-  onOpenHistory: () => void
+  onNavigateHome: () => void
+  onNavigateHistory: () => void
   description: string
   onDescriptionChange: (value: string) => void
   totalNim: string
@@ -48,15 +50,7 @@ export function Screen2CreateSplit({
 }) {
   return (
     <>
-      <HeaderBack
-        title="New split"
-        onBack={onBack}
-        right={
-          <button className="sp-icon-btn" aria-label="History" onClick={onOpenHistory}>
-            <IconHistory />
-          </button>
-        }
-      />
+      <HeaderBack title="New split" onBack={onBack} />
       <div className="sp-body">
         <p className="sp-label">Split title</p>
         <input
@@ -145,6 +139,7 @@ export function Screen2CreateSplit({
           {busy ? 'Connecting to Nimiq Pay...' : 'Create split'}
         </PrimaryButton>
       </div>
+      <BottomNav active="home" onHome={onNavigateHome} onHistory={onNavigateHistory} />
     </>
   )
 }
