@@ -2,12 +2,12 @@ import './landing.css'
 import heroBackground from './hero-background.png'
 
 /**
- * SplitPay marketing landing page — not one of the in-app screens. A
- * standalone promotional page (README link, hackathon submission link)
- * that lives entirely outside the Nimiq Pay mini app itself, built as its
- * own static entry (landing.html) so it works as a plain shareable URL.
+ * SplitPay's welcome screen — the first thing shown when the mini app opens
+ * fresh (no `?s=` split link). `onEnter` moves into the real app (create
+ * split / history). Also built as its own static entry (landing.html) so
+ * the same screen works as a plain shareable teaser URL outside Nimiq Pay.
  */
-export function LandingPage() {
+export function LandingPage({ onEnter }: { onEnter: () => void }) {
   return (
     <div className="lp-shell">
       <div className="lp-card" style={{ backgroundImage: `url(${heroBackground})` }}>
@@ -34,6 +34,10 @@ export function LandingPage() {
             Create a split, share the link, and get paid back instantly on Nimiq. No signups. No
             hassle. Just real payments.
           </p>
+
+          <button className="lp-cta" onClick={onEnter}>
+            Open SplitPay →
+          </button>
 
           <div className="lp-pills">
             <span className="lp-pill">👥 Create Split</span>

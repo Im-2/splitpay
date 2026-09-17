@@ -6,11 +6,13 @@ import { CreateSplit } from './components/CreateSplit'
 import { SplitView } from './components/SplitView'
 import { HistoryView } from './components/HistoryView'
 import { ErrorBanner } from './components/ErrorBanner'
+import { LandingPage } from './marketing/LandingPage'
 
 type Tab = 'create' | 'history'
 
 function App() {
   const [tab, setTab] = useState<Tab>('create')
+  const [entered, setEntered] = useState(false)
 
   const split = useMemo(() => {
     const encoded = new URLSearchParams(window.location.search).get('s')
@@ -25,6 +27,12 @@ function App() {
     // doesn't interrupt split creation or payment later.
     getDeviceId()
   }, [])
+
+  // A shared split link should open straight into the pay/status view, never
+  // behind the welcome screen — only a fresh, link-less open shows it.
+  if (!hasSplitParam && !entered) {
+    return <LandingPage onEnter={() => setEntered(true)} />
+  }
 
   return (
     <div className="app-shell">

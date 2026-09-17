@@ -110,6 +110,26 @@
   margin: 0 0 32px;
 }
 
+.lp-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  border: none;
+  border-radius: 999px;
+  padding: 15px 26px;
+  margin: 0 0 32px;
+  background: #ffffff;
+  color: #0a0a0a;
+  font-family: var(--lp-font);
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.lp-cta:hover {
+  background: #f0f0f0;
+}
+
 .lp-pills {
   display: flex;
   flex-wrap: wrap;

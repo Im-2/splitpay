@@ -4,6 +4,6 @@ import { LandingPage } from './LandingPage'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <LandingPage />
+    <LandingPage onEnter={() => (window.location.href = '/')} />
   </StrictMode>,
 )
