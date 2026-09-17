@@ -1,411 +1,352 @@
+/* ---------- App shell (replaces the reference's demo-only phone frame) ---------- */
+
 .app-shell {
-  min-height: 100vh;
+  min-height: 100dvh;
+  max-width: 480px;
+  margin: 0 auto;
+  background: var(--sp-screen-bg);
   display: flex;
   flex-direction: column;
+}
+
+.sp-statusbar-spacer {
+  height: 12px;
+  flex-shrink: 0;
+}
+
+/* ---------- Header ---------- */
+
+.sp-header {
+  display: flex;
   align-items: center;
-  padding: 16px 16px calc(88px + env(safe-area-inset-bottom));
-  box-sizing: border-box;
-  width: 100%;
+  justify-content: space-between;
+  padding: 4px 20px 12px;
+  flex-shrink: 0;
 }
 
-@media (max-width: 380px) {
-  .app-shell {
-    padding-left: 12px;
-    padding-right: 12px;
-  }
-
-  .card {
-    padding-left: 2px;
-    padding-right: 2px;
-  }
-}
-
-.app-header {
-  width: 100%;
-  max-width: 420px;
-  margin-bottom: 16px;
+.sp-header-left {
   display: flex;
   align-items: center;
   gap: 10px;
 }
 
-.app-header img.logo {
-  width: 32px;
-  height: 32px;
-}
-
-.app-header h2 {
-  margin: 0;
-  font-size: 1.15rem;
-  letter-spacing: 0.01em;
-}
-
-main {
-  width: 100%;
-  max-width: 420px;
-}
-
-.card {
-  background: var(--card-bg);
-  border-radius: 20px;
-  padding: 22px 4px;
+.sp-back {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--sp-card-bg);
   display: flex;
-  flex-direction: column;
-  gap: 14px;
-}
-
-.theme-light {
-  --text: #0a0a0a;
-  --muted-text: #6e6e73;
-  --card-bg: #ffffff;
-  --input-bg: #f2f2f2;
-  --button-bg: #111111;
-  --muted-button-bg: #e5e5e5;
-  --outline-border: #cfcfcf;
-  --border-color: #e5e5e5;
-  padding-left: 18px;
-  padding-right: 18px;
-}
-
-.card h1 {
-  font-size: 1.3rem;
-  margin: 0;
-}
-
-.muted {
-  color: var(--muted-text);
-  margin: 0;
-}
-
-.small {
-  font-size: 0.85rem;
-}
-
-.center {
-  text-align: center;
-}
-
-.amount {
-  font-size: clamp(1.8rem, 9vw, 2.4rem);
-  font-weight: 800;
-  margin: 4px 0;
-  letter-spacing: -0.02em;
-}
-
-.field {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-
-.field > span {
-  font-size: 0.85rem;
-  color: var(--muted-text);
-}
-
-input {
-  font-size: 1rem;
-  padding: 12px 14px;
-  border-radius: 12px;
-  border: 1px solid var(--border-color);
-  background: var(--input-bg);
-  color: inherit;
-  box-sizing: border-box;
-  width: 100%;
-}
-
-input::placeholder {
-  color: var(--muted-text);
-}
-
-.name-row {
-  display: flex;
-  gap: 10px;
   align-items: center;
-  margin-bottom: 6px;
-}
-
-.name-row input {
-  flex: 1;
-}
-
-button {
-  font-size: 1rem;
-  padding: 13px 16px;
-  border-radius: 12px;
+  justify-content: center;
+  color: var(--sp-text-primary);
+  cursor: pointer;
+  font-size: 16px;
+  flex-shrink: 0;
   border: none;
-  background: var(--button-bg);
-  color: inherit;
+  padding: 0;
+}
+
+.sp-header-title {
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--sp-text-primary);
+}
+
+.sp-logo-avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  object-fit: cover;
+}
+
+.sp-bell,
+.sp-header-icon-btn {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--sp-text-secondary);
+  font-size: 13px;
+  flex-shrink: 0;
+  background: var(--sp-card-bg);
+  border: none;
   cursor: pointer;
 }
 
-button:disabled {
+/* ---------- Body / footer ---------- */
+
+.sp-body {
+  flex: 1;
+  padding: 8px 20px 20px;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+}
+
+.sp-footer {
+  padding: 16px 20px calc(24px + env(safe-area-inset-bottom));
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* ---------- Typography ---------- */
+
+.sp-title-xl {
+  font-size: 19px;
+  font-weight: 500;
+  color: var(--sp-text-primary);
+  margin: 0 0 6px;
+  text-align: center;
+}
+
+.sp-subtitle {
+  font-size: 13px;
+  color: var(--sp-text-secondary);
+  margin: 0;
+  text-align: center;
+  line-height: 1.5;
+}
+
+.sp-label {
+  font-size: 12px;
+  color: var(--sp-text-muted);
+  margin: 0 0 6px;
+}
+
+.sp-value-lg {
+  font-size: 26px;
+  font-weight: 500;
+  color: var(--sp-text-primary);
+  margin: 0;
+}
+
+/* ---------- Cards & rows ---------- */
+
+.sp-card {
+  background: var(--sp-card-bg);
+  border: 1px solid var(--sp-border);
+  border-radius: var(--sp-radius-card);
+  padding: 14px 16px;
+}
+
+.sp-card + .sp-card {
+  margin-top: 10px;
+}
+
+.sp-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.sp-row + .sp-row {
+  margin-top: 10px;
+}
+
+.sp-divider {
+  height: 1px;
+  background: var(--sp-border);
+  margin: 12px 0;
+  border: none;
+}
+
+/* ---------- Form controls ---------- */
+
+.sp-input {
+  width: 100%;
+  background: var(--sp-card-bg);
+  border: 1px solid var(--sp-border);
+  border-radius: var(--sp-radius-control);
+  color: var(--sp-text-primary);
+  font-size: 14px;
+  font-family: var(--sp-font);
+  padding: 12px 14px;
+  outline: none;
+}
+
+.sp-input::placeholder {
+  color: var(--sp-text-muted);
+}
+
+.sp-input:focus {
+  border-color: var(--sp-border-strong);
+}
+
+.sp-input-suffix {
+  position: relative;
+}
+
+.sp-input-suffix span {
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 13px;
+  color: var(--sp-text-secondary);
+}
+
+/* ---------- Buttons ---------- */
+
+.sp-btn {
+  width: 100%;
+  border: none;
+  border-radius: var(--sp-radius-control);
+  padding: 14px 16px;
+  font-size: 14px;
+  font-weight: 500;
+  font-family: var(--sp-font);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.sp-btn:disabled {
   opacity: 0.5;
   cursor: not-allowed;
 }
 
-button.primary {
-  background: var(--button-bg);
-  color: #ffffff;
-  font-weight: 700;
+.sp-btn-primary {
+  background: var(--sp-accent);
+  color: var(--sp-on-accent);
 }
 
-button.outline {
-  background: none;
-  border: 1px solid var(--outline-border);
-  color: var(--text);
-  font-weight: 600;
+.sp-btn-secondary {
+  background: transparent;
+  color: var(--sp-text-primary);
+  border: 1px solid var(--sp-border-strong);
 }
 
-button.gold {
-  background: var(--nimiq-gold);
-  color: var(--nimiq-gold-contrast);
-  font-weight: 700;
-}
-
-button.muted-button {
-  background: var(--muted-button-bg);
-  color: var(--muted-text);
-}
-
-button.link-button {
-  background: none;
-  padding: 4px 0;
-  color: var(--text);
-  align-self: flex-start;
-  font-weight: 600;
-}
-
-button.icon-button {
-  background: none;
-  padding: 4px 10px;
-  color: var(--muted-text);
-}
-
-.button-row {
+.sp-btn-row {
   display: flex;
-  gap: 8px;
+  gap: 10px;
 }
 
-.button-row button {
+.sp-btn-row .sp-btn {
+  width: auto;
   flex: 1;
 }
 
-.button-stack {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.pick-button {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  text-align: left;
-  background: var(--input-bg);
-  border: 1px solid var(--border-color);
-  font-weight: 600;
-}
-
-.link-box {
-  background: var(--input-bg);
-  border-radius: 12px;
-  padding: 12px 14px;
-  overflow-wrap: anywhere;
-  font-size: 0.8rem;
-  color: var(--muted-text);
-}
-
-.balance-line {
-  margin: 0;
-  color: var(--muted-text);
-}
-
-.balance-line.insufficient {
-  color: var(--warn-color);
-  font-weight: 600;
-}
-
-.error-banner {
-  background: var(--error-bg);
-  color: var(--error-text);
-  border-radius: 12px;
-  padding: 12px 14px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 8px;
-  font-size: 0.9rem;
-}
-
-.error-banner button {
-  padding: 0;
-  background: none;
-  color: inherit;
-  text-decoration: underline;
-  font-weight: 600;
-}
-
-.success-box {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 6px;
-  padding: 8px 0;
+.sp-hint {
   text-align: center;
+  font-size: 11px;
+  color: var(--sp-text-muted);
+  margin: 6px 0 0;
 }
 
-.status-icon {
+/* ---------- Avatars ---------- */
+
+.sp-avatar {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 500;
+  color: #ffffff;
+}
+
+/* ---------- Status badges ---------- */
+
+.sp-badge {
+  font-size: 11px;
+  font-weight: 500;
+  padding: 4px 10px;
+  border-radius: var(--sp-radius-pill);
+  white-space: nowrap;
+}
+
+.sp-badge-paid {
+  color: var(--sp-success-text);
+  background: var(--sp-success-bg);
+}
+
+.sp-badge-pending {
+  color: var(--sp-pending-text);
+  background: var(--sp-pending-bg);
+}
+
+/* ---------- Icon button (x, copy, share, kebab) ---------- */
+
+.sp-icon-btn {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--sp-text-secondary);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+/* ---------- Status icon circles (success / warning / neutral) ---------- */
+
+.sp-status-icon {
   width: 56px;
   height: 56px;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.6rem;
-  margin-bottom: 4px;
+  font-size: 24px;
+  margin: 12px auto 20px;
 }
 
-.status-icon.success {
-  background: var(--success-bg);
-  color: var(--success-text);
+.sp-status-icon-success {
+  border: 2px solid var(--sp-success-text);
+  color: var(--sp-success-text);
 }
 
-.status-icon.neutral {
-  background: none;
-  border: 2px solid var(--text);
-  color: var(--text);
+.sp-status-icon-danger {
+  border: 2px solid var(--sp-danger-text);
+  color: var(--sp-danger-text);
 }
 
-.status-icon.error {
-  background: var(--error-bg);
-  color: var(--error-text);
+.sp-status-icon-neutral {
+  border: 2px solid var(--sp-border-strong);
+  color: var(--sp-text-primary);
 }
 
-.status-list {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
+/* ---------- Misc app-specific additions (not in the reference) ---------- */
 
-.status-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 10px;
-  padding: 10px 0;
-  border-bottom: 1px solid var(--border-color);
-}
-
-.status-row-main {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.status-row-right {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.badge {
-  font-size: 0.78rem;
-  font-weight: 700;
-  padding: 4px 11px;
-  border-radius: 999px;
-}
-
-.badge.paid {
-  background: var(--success-bg);
-  color: var(--success-text);
-}
-
-.badge.unpaid {
-  background: rgba(255, 159, 10, 0.12);
-  color: var(--warn-color);
-}
-
-.nudge-link {
-  background: none;
-  padding: 2px 6px;
-  color: var(--muted-text);
-  font-size: 1rem;
-}
-
-.avatar {
-  border-radius: 50%;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 700;
-  color: #151116;
-  flex-shrink: 0;
-}
-
-.card h2 {
-  font-size: 1rem;
-  margin: 4px 0 8px;
-}
-
-.history-list {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-
-.history-row {
+.sp-error-banner {
+  background: var(--sp-danger-bg);
+  color: var(--sp-danger-text);
+  border-radius: var(--sp-radius-control);
+  padding: 12px 14px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 12px;
-  text-align: left;
-  background: var(--input-bg);
-  border: 1px solid var(--border-color);
-}
-
-.history-row-main {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-}
-
-.bottom-nav {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  display: flex;
-  justify-content: center;
-  padding: 10px 16px calc(10px + env(safe-area-inset-bottom));
-  background: var(--card-bg);
-  border-top: 1px solid var(--border-color);
-}
-
-.bottom-nav-inner {
-  width: 100%;
-  max-width: 420px;
-  display: flex;
   gap: 8px;
+  font-size: 13px;
 }
 
-.bottom-nav button {
-  flex: 1;
+.sp-error-banner button {
   background: none;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 2px;
-  padding: 6px;
-  font-size: 0.72rem;
-  color: var(--muted-text);
+  border: none;
+  padding: 0;
+  color: inherit;
+  text-decoration: underline;
+  font-weight: 600;
+  font-size: 13px;
+  cursor: pointer;
 }
 
-.bottom-nav button.active {
-  color: var(--text);
-}
-
-.bottom-nav .nav-icon {
-  font-size: 1.2rem;
-  line-height: 1;
+.sp-link-text {
+  font-size: 12px;
+  color: var(--sp-text-primary);
+  word-break: break-all;
 }

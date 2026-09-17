@@ -5,6 +5,7 @@ import { getStoredParticipantId, setStoredParticipantId } from '../lib/participa
 import { ParticipantPicker } from './ParticipantPicker'
 import { PayShare } from './PayShare'
 import { SplitStatus } from './SplitStatus'
+import { goBack } from './Header'
 
 export function SplitView({ split }: { split: Split }) {
   const [viewerAddress, setViewerAddress] = useState<string | null>(null)
@@ -45,20 +46,21 @@ export function SplitView({ split }: { split: Split }) {
 
   if (!addressResolved) {
     return (
-      <div className="card">
-        <p className="muted">Connecting to Nimiq Pay...</p>
+      <div className="sp-body" style={{ alignItems: 'center', justifyContent: 'center' }}>
+        <p className="sp-subtitle">Connecting to Nimiq Pay...</p>
       </div>
     )
   }
 
   const isOrganizer = viewerAddress !== null && viewerAddress === split.organizerAddress
+  const backToHome = () => goBack('/')
 
   if (isOrganizer) {
-    return <SplitStatus split={split} isOrganizer />
+    return <SplitStatus split={split} isOrganizer onBack={backToHome} />
   }
 
   if (wantsStatusView) {
-    return <SplitStatus split={split} isOrganizer={false} />
+    return <SplitStatus split={split} isOrganizer={false} onBack={backToHome} />
   }
 
   const storedParticipant = participantId
@@ -77,5 +79,12 @@ export function SplitView({ split }: { split: Split }) {
     )
   }
 
-  return <PayShare split={split} participantId={storedParticipant.id} viewerAddress={viewerAddress} />
+  return (
+    <PayShare
+      split={split}
+      participantId={storedParticipant.id}
+      viewerAddress={viewerAddress}
+      onBack={backToHome}
+    />
+  )
 }

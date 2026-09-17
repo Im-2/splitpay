@@ -4,11 +4,14 @@ import { shareLuna, memoFor, splitUrl } from '../lib/split'
 import { formatNim } from '../lib/format'
 import { getNimiqProvider, isErrorResponse, describeWalletError } from '../lib/nimiqProvider'
 import { fetchBalanceLuna } from '../lib/balance'
-import { fetchPaymentStatuses } from '../lib/reconcile'
+import { fetchPaymentStatuses, type PaymentStatus } from '../lib/reconcile'
 import { getDeviceId } from '../lib/deviceId'
 import { recordPaidSplit } from '../lib/history'
 import { Avatar } from './Avatar'
+import { StatusBadge } from './StatusBadge'
 import { ErrorBanner } from './ErrorBanner'
+import { HeaderBack, HeaderLogo } from './Header'
+import { IconAlert, IconCheck, IconWallet } from './icons'
 
 type PayState = 'checking' | 'idle' | 'pending' | 'success' | 'error'
 
@@ -16,28 +19,31 @@ export function PayShare({
   split,
   participantId,
   viewerAddress,
+  onBack,
 }: {
   split: Split
   participantId: string
   viewerAddress: string | null
+  onBack: () => void
 }) {
   const participant = split.participants.find((p) => p.id === participantId)
   const owedLuna = shareLuna(split)
 
   const [state, setState] = useState<PayState>('checking')
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
-  const [txHash, setTxHash] = useState<string | null>(null)
+  const [statuses, setStatuses] = useState<PaymentStatus[] | null>(null)
   const [balanceLuna, setBalanceLuna] = useState<number | null>(null)
   const [balanceLoading, setBalanceLoading] = useState(true)
+  const [warningDismissed, setWarningDismissed] = useState(false)
 
   useEffect(() => {
     let cancelled = false
     fetchPaymentStatuses(split)
-      .then((statuses) => {
+      .then((result) => {
         if (cancelled) return
-        const mine = statuses.find((s) => s.participantId === participantId)
+        setStatuses(result)
+        const mine = result.find((s) => s.participantId === participantId)
         if (mine?.paid) {
-          setTxHash(mine.txHash ?? null)
           setState('success')
         } else {
           setState('idle')
@@ -87,16 +93,18 @@ export function PayShare({
         setState('error')
         return
       }
-      setTxHash(result)
+      // Optimistic update: the chain won't have this transaction indexed yet,
+      // so mark it paid locally rather than waiting on a reconciliation query
+      // that would still show everyone as pending right after paying.
+      setStatuses((prev) => {
+        const rest = (prev ?? split.participants.map((p) => ({ participantId: p.id, paid: false }))).filter(
+          (s) => s.participantId !== participantId,
+        )
+        return [...rest, { participantId, paid: true, txHash: result }]
+      })
       setState('success')
       getDeviceId().then((deviceId) =>
-        recordPaidSplit({
-          split,
-          participantId,
-          txHash: result,
-          amountLuna: owedLuna,
-          deviceId,
-        }),
+        recordPaidSplit({ split, participantId, txHash: result, amountLuna: owedLuna, deviceId }),
       )
     } catch {
       setErrorMessage('Could not reach Nimiq Pay to send the payment. Check your connection and try again.')
@@ -110,67 +118,154 @@ export function PayShare({
 
   const insufficientBalance = balanceLuna !== null && balanceLuna < owedLuna
 
-  if (state === 'success') {
+  // A one-time proactive heads-up before the pay screen, not a hard block:
+  // dismissing it always leads back to a pay button that still works.
+  if (insufficientBalance && !warningDismissed && state !== 'success') {
     return (
-      <div className="card">
-        <div className="success-box">
-          <span className="status-icon success">&#10003;</span>
-          <h1>Payment successful</h1>
-          <p className="muted">You paid</p>
-          <p className="amount">{formatNim(owedLuna)}</p>
-          <p className="muted small">{split.description}</p>
-          {txHash && <p className="muted small">Transaction {txHash.slice(0, 16)}...</p>}
+      <>
+        <HeaderLogo />
+        <div className="sp-body" style={{ alignItems: 'center', textAlign: 'center' }}>
+          <div className="sp-status-icon sp-status-icon-danger">
+            <IconAlert />
+          </div>
+          <h1 className="sp-title-xl">Insufficient balance</h1>
+          <p className="sp-subtitle" style={{ marginBottom: 20 }}>
+            You need
+          </p>
+          <p className="sp-value-lg" style={{ marginBottom: 2 }}>
+            {formatNim(owedLuna)}
+          </p>
+          <p className="sp-subtitle" style={{ marginBottom: 20 }}>
+            to join this split
+          </p>
+
+          <div className="sp-card" style={{ width: '100%', marginBottom: 12 }}>
+            <p className="sp-label" style={{ marginBottom: 2 }}>
+              Your balance
+            </p>
+            <p style={{ fontSize: 20, fontWeight: 500, color: 'var(--sp-danger-text)', margin: 0 }}>
+              {formatNim(balanceLuna)}
+            </p>
+          </div>
+
+          <div className="sp-card" style={{ width: '100%', background: 'var(--sp-danger-bg)', border: 'none', textAlign: 'left' }}>
+            <p style={{ fontSize: 13, color: 'var(--sp-danger-text)', margin: 0, lineHeight: 1.5 }}>
+              Not enough NIM to cover this payment. Please top up your wallet and try again.
+            </p>
+          </div>
         </div>
-        <button
-          className="primary"
-          onClick={() => {
-            const url = new URL(splitUrl(split))
-            url.searchParams.set('view', 'status')
-            window.location.href = url.toString()
-          }}
-        >
-          View split status
-        </button>
-      </div>
+        <div className="sp-footer">
+          <button className="sp-btn sp-btn-primary" onClick={() => setWarningDismissed(true)}>
+            Got it
+          </button>
+        </div>
+      </>
+    )
+  }
+
+  if (state === 'success') {
+    const paidCount = statuses?.filter((s) => s.paid).length ?? 0
+    return (
+      <>
+        <HeaderLogo />
+        <div className="sp-body" style={{ alignItems: 'center', textAlign: 'center' }}>
+          <div className="sp-status-icon sp-status-icon-success">
+            <IconCheck />
+          </div>
+          <h1 className="sp-title-xl">Payment successful</h1>
+          <p className="sp-subtitle" style={{ marginBottom: 2 }}>
+            You paid
+          </p>
+          <p className="sp-value-lg" style={{ marginBottom: 2 }}>
+            {formatNim(owedLuna)}
+          </p>
+          <p className="sp-subtitle" style={{ marginBottom: 20 }}>
+            {split.description}
+          </p>
+
+          <div className="sp-card" style={{ width: '100%', textAlign: 'left' }}>
+            <div className="sp-row" style={{ marginBottom: 10 }}>
+              <span style={{ fontSize: 13, fontWeight: 500 }}>Split status</span>
+              <span style={{ fontSize: 12, color: 'var(--sp-text-muted)' }}>
+                {paidCount} of {split.participants.length} paid
+              </span>
+            </div>
+            {split.participants.map((p) => {
+              const paid = statuses?.find((s) => s.participantId === p.id)?.paid ?? p.id === participantId
+              return (
+                <div key={p.id} className="sp-row">
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                    <Avatar name={p.name} />
+                    <span style={{ fontSize: 13 }}>{p.name}</span>
+                  </div>
+                  <StatusBadge paid={paid} />
+                </div>
+              )
+            })}
+          </div>
+        </div>
+        <div className="sp-footer">
+          <button
+            className="sp-btn sp-btn-primary"
+            onClick={() => {
+              const url = new URL(splitUrl(split))
+              url.searchParams.set('view', 'status')
+              window.location.href = url.toString()
+            }}
+          >
+            View split status
+          </button>
+        </div>
+      </>
     )
   }
 
   return (
-    <div className="card">
-      <div className="name-row">
-        <Avatar name={participant.name} />
-        <div>
-          <h1>{split.description}</h1>
-          <p className="muted small">Requested by the organizer</p>
-        </div>
-      </div>
-      <p className="muted">Hi {participant.name}, here's what you owe</p>
-      <p className="amount">{formatNim(owedLuna)}</p>
-      {!balanceLoading && balanceLuna !== null && (
-        <p className={insufficientBalance ? 'balance-line insufficient' : 'balance-line'}>
-          Your balance: {formatNim(balanceLuna)}
-        </p>
-      )}
-      {insufficientBalance && (
-        <ErrorBanner message="Not enough NIM to cover this." />
-      )}
+    <>
+      <HeaderBack title="Pay your share" onBack={onBack} />
+      <div className="sp-body">
+        <div className="sp-card">
+          <p className="sp-label" style={{ marginBottom: 2 }}>
+            {split.description}
+          </p>
+          <p style={{ fontSize: 12, color: 'var(--sp-text-secondary)', margin: 0 }}>Requested by the organizer</p>
 
-      {state === 'checking' && <p className="muted small">Checking payment status...</p>}
+          <hr className="sp-divider" />
 
-      {(state === 'idle' || state === 'pending' || state === 'error') && (
-        <>
-          {state === 'error' && errorMessage && (
-            <ErrorBanner message={errorMessage} onRetry={handlePay} />
+          <div className="sp-row">
+            <span className="sp-label" style={{ margin: 0 }}>
+              Your share
+            </span>
+            <span style={{ fontSize: 15, fontWeight: 500 }}>{formatNim(owedLuna)}</span>
+          </div>
+          {!balanceLoading && balanceLuna !== null && (
+            <div className="sp-row">
+              <span className="sp-label" style={{ margin: 0 }}>
+                Your balance
+              </span>
+              <span style={{ fontSize: 15, fontWeight: 500 }}>{formatNim(balanceLuna)}</span>
+            </div>
           )}
-          <button
-            className={insufficientBalance ? 'gold muted-button' : 'gold'}
-            disabled={state === 'pending'}
-            onClick={handlePay}
-          >
-            {state === 'pending' ? 'Confirm in Nimiq Pay...' : 'Pay with Nimiq Pay'}
-          </button>
-        </>
-      )}
-    </div>
+        </div>
+
+        {state === 'error' && errorMessage ? (
+          <div style={{ marginTop: 16 }}>
+            <ErrorBanner message={errorMessage} onRetry={handlePay} />
+          </div>
+        ) : (
+          <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <p className="sp-subtitle">
+              {state === 'checking' ? 'Checking payment status...' : "You're all set to pay!"}
+            </p>
+          </div>
+        )}
+      </div>
+      <div className="sp-footer">
+        <button className="sp-btn sp-btn-primary" disabled={state === 'pending'} onClick={handlePay}>
+          <IconWallet /> {state === 'pending' ? 'Confirm in Nimiq Pay...' : 'Pay with Nimiq Pay'}
+        </button>
+        <p className="sp-hint">Secure payments with Nimiq Pay</p>
+      </div>
+    </>
   )
 }

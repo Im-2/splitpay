@@ -8,11 +8,11 @@ import { HistoryView } from './components/HistoryView'
 import { ErrorBanner } from './components/ErrorBanner'
 import { LandingPage } from './marketing/LandingPage'
 
-type Tab = 'create' | 'history'
+type Screen = 'create' | 'history'
 
 function App() {
-  const [tab, setTab] = useState<Tab>('create')
   const [entered, setEntered] = useState(false)
+  const [screen, setScreen] = useState<Screen>('create')
 
   const split = useMemo(() => {
     const encoded = new URLSearchParams(window.location.search).get('s')
@@ -34,35 +34,24 @@ function App() {
     return <LandingPage onEnter={() => setEntered(true)} />
   }
 
+  if (hasSplitParam && !split) {
+    return (
+      <div className="app-shell">
+        <div className="sp-body" style={{ alignItems: 'center', justifyContent: 'center' }}>
+          <ErrorBanner message="This split link looks broken or incomplete." />
+        </div>
+      </div>
+    )
+  }
+
   return (
     <div className="app-shell">
-      <header className="app-header">
-        <img src="/logo.svg" className="logo" alt="" />
-        <h2>SplitPay</h2>
-      </header>
-      <main>
-        {hasSplitParam && !split && (
-          <div className="card">
-            <ErrorBanner message="This split link looks broken or incomplete." />
-          </div>
-        )}
-        {split && <SplitView split={split} />}
-        {!hasSplitParam && tab === 'create' && <CreateSplit />}
-        {!hasSplitParam && tab === 'history' && <HistoryView />}
-      </main>
-      {!hasSplitParam && (
-        <nav className="bottom-nav">
-          <div className="bottom-nav-inner">
-            <button className={tab === 'create' ? 'active' : ''} onClick={() => setTab('create')}>
-              <span className="nav-icon">+</span>
-              New split
-            </button>
-            <button className={tab === 'history' ? 'active' : ''} onClick={() => setTab('history')}>
-              <span className="nav-icon">&#9776;</span>
-              History
-            </button>
-          </div>
-        </nav>
+      {split ? (
+        <SplitView split={split} />
+      ) : screen === 'create' ? (
+        <CreateSplit onBack={() => setEntered(false)} onOpenHistory={() => setScreen('history')} />
+      ) : (
+        <HistoryView onBack={() => setScreen('create')} />
       )}
     </div>
   )

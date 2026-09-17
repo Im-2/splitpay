@@ -1,4 +1,4 @@
-const PALETTE = ['#f3c332', '#6bd394', '#7aa2f7', '#f6a3a8', '#c792ea', '#4fd1c5', '#f0975a']
+const PALETTE = ['#7c6adf', '#3f8f6b', '#4a4a4a', '#b3562f', '#3a6ea5', '#8a3f6b', '#5f7a3f']
 
 function colorFor(seed: string): string {
   let hash = 0
@@ -6,25 +6,19 @@ function colorFor(seed: string): string {
   return PALETTE[hash % PALETTE.length]
 }
 
-function initialsFor(name: string): string {
-  const parts = name.trim().split(/\s+/).filter(Boolean)
-  if (parts.length === 0) return '?'
-  if (parts.length === 1) return parts[0].slice(0, 2).toUpperCase()
-  return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase()
-}
-
-export function Avatar({ name, size = 36 }: { name: string; size?: number }) {
+export function Avatar({ name, size = 34 }: { name: string; size?: number }) {
+  const initial = name.trim().slice(0, 1).toUpperCase() || '?'
   return (
     <span
-      className="avatar"
+      className="sp-avatar"
       style={{
         background: colorFor(name),
         width: size,
         height: size,
-        fontSize: size * 0.4,
+        fontSize: size * 0.38,
       }}
     >
-      {initialsFor(name)}
+      {initial}
     </span>
   )
 }
