@@ -1,9 +1,11 @@
 import type { Split } from '../lib/split'
 import { formatNim } from '../lib/format'
 import { shareLuna } from '../lib/split'
-import { Avatar } from './Avatar'
-import { HeaderLogo } from './Header'
+import { Avatar } from './atoms'
+import { HeaderLogo } from './PhoneScreen'
+import { initialFor, colorFor } from '../lib/avatarStyle'
 
+/** No reference screen covers this — the reference assumed the viewer's identity was already known ("Requested by you@nimiq"). Styled to match the reference's theme/atoms since there's nothing to port structurally. */
 export function ParticipantPicker({
   split,
   onPick,
@@ -40,7 +42,7 @@ export function ParticipantPicker({
                 justifyContent: 'flex-start',
               }}
             >
-              <Avatar name={p.name} />
+              <Avatar initial={initialFor(p.name)} color={colorFor(p.name)} />
               <span style={{ fontSize: 14, color: 'var(--sp-text-primary)', fontWeight: 500 }}>{p.name}</span>
             </button>
           ))}

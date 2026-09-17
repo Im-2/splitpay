@@ -1,3 +1,61 @@
+import React from 'react'
+
+/**
+ * PhoneScreen — static device frame used to preview each screen in isolation.
+ * This is a demo-only wrapper for reviewing the UI reference; it is NOT part
+ * of the real mini app (a mini app just renders as a normal web page inside
+ * the Nimiq Pay WebView, it doesn't need to draw its own phone chrome).
+ */
+export function PhoneScreen({ children }: { children: React.ReactNode }) {
+  return (
+    <div className="sp-phone">
+      <div className="sp-screen">
+        <div className="sp-statusbar" />
+        {children}
+      </div>
+    </div>
+  )
+}
+
+/** Top bar variant with the SplitPay logo + notification bell (home-style screens). */
+export function HeaderLogo() {
+  return (
+    <div className="sp-header">
+      <div className="sp-header-left">
+        <img src="/logo.svg" className="sp-logo-avatar" alt="" />
+      </div>
+      <div className="sp-bell">
+        <IconBell />
+      </div>
+    </div>
+  )
+}
+
+/** Top bar variant with a back chevron + centered title (form / detail screens). */
+export function HeaderBack({
+  title,
+  onBack,
+  right,
+}: {
+  title: string
+  onBack?: () => void
+  right?: React.ReactNode
+}) {
+  return (
+    <div className="sp-header">
+      <div className="sp-header-left">
+        <button className="sp-back" onClick={onBack} aria-label="Go back">
+          <IconChevronLeft />
+        </button>
+      </div>
+      <div className="sp-header-title">{title}</div>
+      {right ?? <div style={{ width: 28 }} />}
+    </div>
+  )
+}
+
+/* ---------- Minimal inline icon set (no external icon library dependency) ---------- */
+
 export function IconChevronLeft() {
   return (
     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
@@ -76,6 +134,17 @@ export function IconChevronRight() {
   )
 }
 
+/* ---------- Bottom nav icons ---------- */
+
+export function IconHome() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+      <path d="M3 10.5L12 3l9 7.5" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M5 9v11h14V9" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  )
+}
+
 export function IconWallet() {
   return (
     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -86,6 +155,25 @@ export function IconWallet() {
   )
 }
 
+export function IconCoin() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+      <circle cx="12" cy="12" r="9" />
+      <path d="M9.5 15.5c.5.7 1.4 1 2.5 1 1.8 0 3-1 3-2.2 0-3-5.5-1.3-5.5-4.1 0-1.3 1.3-2.2 3-2.2 1.1 0 2 .4 2.5 1" strokeLinecap="round" />
+    </svg>
+  )
+}
+
+export function IconUser() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+      <circle cx="12" cy="8" r="4" />
+      <path d="M4 21c0-4 3.6-7 8-7s8 3 8 7" strokeLinecap="round" />
+    </svg>
+  )
+}
+
+/** Not in the original reference — History has no covered screen, so this icon was added to match the existing style. */
 export function IconHistory() {
   return (
     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">

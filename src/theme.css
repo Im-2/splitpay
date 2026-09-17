@@ -1,0 +1,401 @@
+/*
+  SplitPay — UI reference theme
+  This file is a static visual reference, not the production app.
+  Colors and spacing are named as tokens so Claude Code can swap them
+  for a real design system later without hunting through components.
+*/
+
+:root {
+  --sp-bg: #f2f2f2;
+  --sp-screen-bg: #0c0c0c;
+  --sp-card-bg: #171717;
+  --sp-card-bg-raised: #1e1e1e;
+  --sp-border: rgba(255, 255, 255, 0.08);
+  --sp-border-strong: rgba(255, 255, 255, 0.16);
+
+  --sp-text-primary: #ffffff;
+  --sp-text-secondary: rgba(255, 255, 255, 0.6);
+  --sp-text-muted: rgba(255, 255, 255, 0.4);
+
+  --sp-accent: #ffffff;
+  --sp-on-accent: #0c0c0c;
+
+  --sp-success-text: #4ade80;
+  --sp-success-bg: rgba(74, 222, 128, 0.12);
+
+  --sp-pending-text: #fbbf24;
+  --sp-pending-bg: rgba(251, 191, 36, 0.12);
+
+  --sp-danger-text: #f87171;
+  --sp-danger-bg: rgba(248, 113, 113, 0.12);
+
+  --sp-radius-screen: 36px;
+  --sp-radius-card: 16px;
+  --sp-radius-control: 12px;
+  --sp-radius-pill: 999px;
+
+  --sp-font: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: var(--sp-font);
+  background: var(--sp-bg);
+  color: var(--sp-text-primary);
+}
+
+/* ---------- Gallery layout (demo-only, for viewing all screens) ---------- */
+
+.sp-gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 40px;
+  padding: 48px;
+}
+
+.sp-gallery-item-label {
+  text-align: center;
+  margin-top: 16px;
+  font-size: 13px;
+  color: #555;
+  font-weight: 500;
+}
+
+/* ---------- Phone frame ---------- */
+
+.sp-phone {
+  width: 320px;
+  height: 660px;
+  background: #000;
+  border-radius: var(--sp-radius-screen);
+  padding: 10px;
+  margin: 0 auto;
+  box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.85);
+}
+
+.sp-screen {
+  width: 100%;
+  height: 100%;
+  background: var(--sp-screen-bg);
+  border-radius: 28px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  font-size: 14px;
+}
+
+.sp-statusbar {
+  height: 24px;
+  flex-shrink: 0;
+}
+
+.sp-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 4px 20px 12px;
+  flex-shrink: 0;
+}
+
+.sp-header-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.sp-back {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--sp-card-bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--sp-text-primary);
+  cursor: pointer;
+  font-size: 16px;
+  flex-shrink: 0;
+}
+
+.sp-header-title {
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--sp-text-primary);
+}
+
+.sp-logo-avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: conic-gradient(from 90deg, #6ee7b7, #60a5fa, #f472b6, #fbbf24, #6ee7b7);
+  flex-shrink: 0;
+}
+
+.sp-bell {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--sp-card-bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--sp-text-secondary);
+  font-size: 13px;
+  flex-shrink: 0;
+}
+
+.sp-body {
+  flex: 1;
+  padding: 8px 20px 20px;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+}
+
+.sp-footer {
+  padding: 16px 20px 24px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* ---------- Typography ---------- */
+
+.sp-title-xl {
+  font-size: 19px;
+  font-weight: 500;
+  color: var(--sp-text-primary);
+  margin: 0 0 6px;
+  text-align: center;
+}
+
+.sp-subtitle {
+  font-size: 13px;
+  color: var(--sp-text-secondary);
+  margin: 0;
+  text-align: center;
+  line-height: 1.5;
+}
+
+.sp-label {
+  font-size: 12px;
+  color: var(--sp-text-muted);
+  margin: 0 0 6px;
+}
+
+.sp-value-lg {
+  font-size: 26px;
+  font-weight: 500;
+  color: var(--sp-text-primary);
+  margin: 0;
+}
+
+/* ---------- Cards & rows ---------- */
+
+.sp-card {
+  background: var(--sp-card-bg);
+  border: 1px solid var(--sp-border);
+  border-radius: var(--sp-radius-card);
+  padding: 14px 16px;
+}
+
+.sp-card + .sp-card {
+  margin-top: 10px;
+}
+
+.sp-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.sp-row + .sp-row {
+  margin-top: 10px;
+}
+
+.sp-divider {
+  height: 1px;
+  background: var(--sp-border);
+  margin: 12px 0;
+  border: none;
+}
+
+/* ---------- Form controls ---------- */
+
+.sp-input {
+  width: 100%;
+  background: var(--sp-card-bg);
+  border: 1px solid var(--sp-border);
+  border-radius: var(--sp-radius-control);
+  color: var(--sp-text-primary);
+  font-size: 14px;
+  font-family: var(--sp-font);
+  padding: 12px 14px;
+  outline: none;
+}
+
+.sp-input:focus {
+  border-color: var(--sp-border-strong);
+}
+
+.sp-input-suffix {
+  position: relative;
+}
+
+.sp-input-suffix span {
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 13px;
+  color: var(--sp-text-secondary);
+}
+
+/* ---------- Buttons ---------- */
+
+.sp-btn {
+  width: 100%;
+  border: none;
+  border-radius: var(--sp-radius-control);
+  padding: 14px 16px;
+  font-size: 14px;
+  font-weight: 500;
+  font-family: var(--sp-font);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.sp-btn-primary {
+  background: var(--sp-accent);
+  color: var(--sp-on-accent);
+}
+
+.sp-btn-secondary {
+  background: transparent;
+  color: var(--sp-text-primary);
+  border: 1px solid var(--sp-border-strong);
+}
+
+.sp-btn-row {
+  display: flex;
+  gap: 10px;
+}
+
+.sp-hint {
+  text-align: center;
+  font-size: 11px;
+  color: var(--sp-text-muted);
+  margin: 6px 0 0;
+}
+
+/* ---------- Avatars ---------- */
+
+.sp-avatar {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 500;
+  color: #fff;
+  background: #3a3a3a;
+}
+
+/* ---------- Status badges ---------- */
+
+.sp-badge {
+  font-size: 11px;
+  font-weight: 500;
+  padding: 4px 10px;
+  border-radius: var(--sp-radius-pill);
+  white-space: nowrap;
+}
+
+.sp-badge-paid {
+  color: var(--sp-success-text);
+  background: var(--sp-success-bg);
+}
+
+.sp-badge-pending {
+  color: var(--sp-pending-text);
+  background: var(--sp-pending-bg);
+}
+
+/* ---------- Icon button (x, copy, share, kebab) ---------- */
+
+.sp-icon-btn {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--sp-text-secondary);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+/* ---------- Bottom nav (organizer / nudge screens) ---------- */
+
+.sp-bottomnav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 22px;
+  background: var(--sp-card-bg);
+  border-radius: var(--sp-radius-pill);
+  padding: 12px 24px;
+  margin: 0 20px 16px;
+}
+
+.sp-bottomnav-item {
+  color: var(--sp-text-muted);
+  font-size: 16px;
+}
+
+.sp-bottomnav-item.active {
+  color: var(--sp-text-primary);
+}
+
+/* ---------- Status icon circles (success / warning) ---------- */
+
+.sp-status-icon {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  margin: 12px auto 20px;
+}
+
+.sp-status-icon-success {
+  border: 2px solid var(--sp-success-text);
+  color: var(--sp-success-text);
+}
+
+.sp-status-icon-danger {
+  border: 2px solid var(--sp-danger-text);
+  color: var(--sp-danger-text);
+}
+
+.sp-status-icon-neutral {
+  border: 2px solid var(--sp-border-strong);
+  color: var(--sp-text-primary);
+}

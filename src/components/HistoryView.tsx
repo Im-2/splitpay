@@ -8,8 +8,7 @@ import {
 import { splitUrl } from '../lib/split'
 import { formatNim } from '../lib/format'
 import { fetchPaymentStatuses } from '../lib/reconcile'
-import { HeaderBack } from './Header'
-import { IconChevronRight } from './icons'
+import { HeaderBack, IconChevronRight } from './PhoneScreen'
 
 function formatDate(ms: number): string {
   return new Date(ms).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })

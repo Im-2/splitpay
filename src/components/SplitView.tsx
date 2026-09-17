@@ -5,7 +5,7 @@ import { getStoredParticipantId, setStoredParticipantId } from '../lib/participa
 import { ParticipantPicker } from './ParticipantPicker'
 import { PayShare } from './PayShare'
 import { SplitStatus } from './SplitStatus'
-import { goBack } from './Header'
+import { goBack } from '../lib/navigation'
 
 export function SplitView({ split }: { split: Split }) {
   const [viewerAddress, setViewerAddress] = useState<string | null>(null)
